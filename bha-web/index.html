@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bhagavan Reddy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --glass-bg: rgba(255,255,255,0.07);
+      --glass-border: rgba(255,255,255,0.15);
+      --glass-shadow: rgba(0,0,0,0.35);
+      --accent: #a78bfa;
+      --accent2: #60a5fa;
+      --text: #f0eeff;
+      --muted: rgba(240,238,255,0.55);
+    }
+
+    html, body {
+      min-height: 100%;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    body {
+      background: #0a0a18;
+      overflow-x: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+
+    /* Animated gradient mesh background */
+    .bg-scene {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.55;
+      animation: drift 12s ease-in-out infinite alternate;
+    }
+    .blob-1 {
+      width: 520px; height: 520px;
+      background: radial-gradient(circle, #4f46e5 0%, #7c3aed 60%, transparent 100%);
+      top: -120px; left: -100px;
+      animation-delay: 0s;
+    }
+    .blob-2 {
+      width: 420px; height: 420px;
+      background: radial-gradient(circle, #1d4ed8 0%, #0ea5e9 60%, transparent 100%);
+      bottom: -100px; right: -80px;
+      animation-delay: -4s;
+    }
+    .blob-3 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, #9333ea 0%, #db2777 60%, transparent 100%);
+      top: 40%; left: 55%;
+      animation-delay: -8s;
+    }
+
+    @keyframes drift {
+      0%   { transform: translate(0px, 0px) scale(1); }
+      50%  { transform: translate(30px, -30px) scale(1.06); }
+      100% { transform: translate(-20px, 20px) scale(0.96); }
+    }
+
+    /* Noise texture overlay */
+    .noise {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    /* Card */
+    .card {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 420px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 28px;
+      backdrop-filter: blur(28px) saturate(1.4);
+      -webkit-backdrop-filter: blur(28px) saturate(1.4);
+      box-shadow:
+        0 8px 40px var(--glass-shadow),
+        inset 0 1px 0 rgba(255,255,255,0.12);
+      padding: 2.5rem 2rem 2.2rem;
+      animation: cardIn 0.9s cubic-bezier(0.22,1,0.36,1) both;
+    }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(32px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Inner top glow line */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 15%; right: 15%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(167,139,250,0.7), rgba(96,165,250,0.7), transparent);
+      border-radius: 100%;
+    }
+
+    /* Avatar */
+    .avatar-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.4rem;
+      animation: fadeUp 0.7s 0.15s both;
+    }
+
+    .avatar-ring {
+      position: relative;
+      width: 108px;
+      height: 108px;
+    }
+
+    .avatar-ring::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: conic-gradient(from 180deg, #7c3aed, #60a5fa, #a78bfa, #f472b6, #7c3aed);
+      animation: spin 5s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .avatar-inner {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid #0a0a18;
+      background: rgba(255,255,255,0.05);
+    }
+
+    .avatar-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+
+    /* Name & bio */
+    .name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.75rem;
+      color: var(--text);
+      text-align: center;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      animation: fadeUp 0.7s 0.25s both;
+    }
+
+    .handle {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-align: center;
+      margin-top: 0.3rem;
+      animation: fadeUp 0.7s 0.32s both;
+    }
+
+    .divider {
+      width: 40px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 2px;
+      margin: 1rem auto;
+      animation: fadeUp 0.7s 0.38s both;
+    }
+
+    .bio {
+      font-size: 0.875rem;
+      line-height: 1.65;
+      color: var(--muted);
+      text-align: center;
+      padding: 0 0.25rem;
+      animation: fadeUp 0.7s 0.44s both;
+    }
+
+    /* Links */
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin-top: 1.8rem;
+    }
+
+    .link-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      padding: 0.85rem 1.2rem;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text);
+      text-decoration: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      transition: background 0.25s, border-color 0.25s, transform 0.22s, box-shadow 0.25s;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .link-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.06) 50%, transparent 70%);
+      transform: translateX(-100%);
+      transition: transform 0.45s ease;
+    }
+
+    .link-btn:hover::after {
+      transform: translateX(100%);
+    }
+
+    .link-btn:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.22);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .link-btn:active {
+      transform: translateY(0px) scale(0.98);
+    }
+
+    .link-btn .icon-wrap {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.25s;
+    }
+
+    .link-btn:hover .icon-wrap {
+      transform: scale(1.1) rotate(-3deg);
+    }
+
+    .link-btn.linkedin .icon-wrap { background: rgba(10,102,194,0.25); }
+    .link-btn.instagram .icon-wrap { background: rgba(228,64,95,0.2); }
+    .link-btn.email .icon-wrap    { background: rgba(167,139,250,0.2); }
+
+    .link-label {
+      flex: 1;
+    }
+
+    .link-title {
+      display: block;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .link-sub {
+      display: block;
+      font-size: 0.74rem;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    .arrow {
+      color: var(--muted);
+      font-size: 1rem;
+      transition: transform 0.22s, color 0.22s;
+    }
+    .link-btn:hover .arrow {
+      transform: translateX(3px);
+      color: var(--accent);
+    }
+
+    /* Stagger link animations */
+    .links .link-btn:nth-child(1) { animation: fadeUp 0.6s 0.52s both; }
+    .links .link-btn:nth-child(2) { animation: fadeUp 0.6s 0.60s both; }
+    .links .link-btn:nth-child(3) { animation: fadeUp 0.6s 0.68s both; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 1.8rem;
+      text-align: center;
+      font-size: 0.7rem;
+      color: rgba(240,238,255,0.2);
+      letter-spacing: 0.06em;
+      animation: fadeUp 0.6s 0.78s both;
+    }
+
+    /* Mobile tweaks */
+    @media (max-width: 440px) {
+      .card { padding: 2rem 1.4rem 1.8rem; border-radius: 22px; }
+      .name { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-scene">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+  <div class="noise"></div>
+
+  <div class="card">
+
+    <div class="avatar-wrap">
+      <div class="avatar-ring">
+        <div class="avatar-inner">
+          <img src="bhaimg.jpeg" alt="Bhagavan Reddy" onerror="this.style.display='none';this.parentNode.style.background='linear-gradient(135deg,#4f46e5,#7c3aed)'"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="name">Bhagavan Reddy</div>
+    <div class="handle">@bhag__x</div>
+
+    <div class="divider"></div>
+
+    <p class="bio">
+      3rd‑year Computer Science &amp; Engineering student at Sri Venkateswara University.
+      Aspiring Software Engineer with a passion for building innovative tech solutions.
+    </p>
+
+    <div class="links">
+
+      <!-- LinkedIn -->
+      <a class="link-btn linkedin" href="https://www.linkedin.com/in/bhagavan-reddy-7374742b3" target="_blank" rel="noopener">
+        <div class="icon-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="24" height="24" rx="4" fill="#0A66C2"/>
+            <path d="M7.5 10H5V19H7.5V10Z" fill="white"/>
+            <circle cx="6.25" cy="7.25" r="1.5" fill="white"/>
+            <path d="M19 19H16.5V14.5C16.5 13.4 15.8 12.75 14.75 12.75C13.7 12.75 13 13.4 13 14.5V19H10.5V10H13V11.25C13.6 10.45 14.65 10 15.75 10C17.6 10 19 11.35 19 13.5V19Z" fill="white"/>
+          </svg>
+        </div>
+        <div class="link-label">
+          <span class="link-title">LinkedIn</span>
+          <span class="link-sub">Connect with me</span>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+
+      <!-- Instagram -->
+      <a class="link-btn instagram" href="https://www.instagram.com/bhag__x" target="_blank" rel="noopener">
+        <div class="icon-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="ig1" cx="30%" cy="107%" r="150%">
+                <stop offset="0%" stop-color="#fdf497"/>
+                <stop offset="5%" stop-color="#fdf497"/>
+                <stop offset="45%" stop-color="#fd5949"/>
+                <stop offset="60%" stop-color="#d6249f"/>
+                <stop offset="90%" stop-color="#285AEB"/>
+              </radialGradient>
+            </defs>
+            <rect width="24" height="24" rx="6" fill="url(#ig1)"/>
+            <rect x="6.5" y="6.5" width="11" height="11" rx="3.5" stroke="white" stroke-width="1.5" fill="none"/>
+            <circle cx="12" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none"/>
+            <circle cx="16.2" cy="7.8" r="0.9" fill="white"/>
+          </svg>
+        </div>
+        <div class="link-label">
+          <span class="link-title">Instagram</span>
+          <span class="link-sub">Follow my journey</span>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+
+      <!-- Email -->
+      <a class="link-btn email" href="mailto:bhagavanreddy2005@gmail.com">
+        <div class="icon-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="24" height="24" rx="5" fill="#a78bfa" opacity="0.9"/>
+            <rect x="4" y="7" width="16" height="11" rx="2" stroke="white" stroke-width="1.5" fill="none"/>
+            <path d="M4 9L12 14L20 9" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="link-label">
+          <span class="link-title">Email</span>
+          <span class="link-sub">bhagavanreddy2005@gmail.com</span>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+
+    </div>
+
+    <div class="footer">SVU · CSE · Class of 2026</div>
+
+  </div>
+
+</body>
+</html>
